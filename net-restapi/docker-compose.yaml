@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+    restapi:
+        tty: true
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./net-restapi:/django
+#        command: sh -c "pyarmor gen test.py && python manage.py runserver 0.0.0.0:8000"
+#        command:
+#            - /bin/bash
+#            - -c
+#            - |
+#                pyarmor gen test.py
+#                python manage.py runserver 0.0.0.0:8000
+        ports:
+            - "8000:8000"
