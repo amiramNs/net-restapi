@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-3v(xvpqmudtyilmjmv!=tbxxo46q(2u$yg8cgg2qw^669$ppq@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 TIME_ZONE = 'Asia/Tehran'
 
@@ -39,8 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # CORS
+    'corsheaders',
+
+    # rest framework
     'rest_framework',
     'rest_framework_simplejwt',
+
     # Simple jwt blacklist
     'rest_framework_simplejwt.token_blacklist',
 
@@ -48,6 +54,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
 
+    # apps
     'project.apps.profile',
     'project.apps.factory',
 ]
@@ -55,6 +62,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,6 +135,18 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SECURE': os.getenv('AUTH_COOKIE_SECURE', 'True') == 'True',
     'AUTH_COOKIE_HTTP_ONLY': os.getenv('AUTH_COOKIE_HTTP_ONLY', 'True') == 'True',
     'AUTH_COOKIE_SAMESITE': os.getenv('AUTH_COOKIE_SAMESITE', None),
+}
+
+# Cors
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_CONFIGURATION = {
+    'CORSRules': [{
+        'AllowedHeaders': ['Authorization'],
+        'AllowedMethods': ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
+        'AllowedOrigins': ['*'],
+        'ExposeHeaders': ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
+        'MaxAgeSeconds': 3000
+    }]
 }
 
 # Internationalization
