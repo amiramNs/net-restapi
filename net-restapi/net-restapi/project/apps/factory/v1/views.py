@@ -100,7 +100,7 @@ class DeleteEquipmentView(DestroyAPIView):
 @extend_schema(methods=['PUT'], exclude=True)
 class UpdateEquipmentView(UpdateAPIView):
     serializer_class = serializers.EquipmentSerializer
-    # permission_classes = (IsUserAdmin,)
+    permission_classes = (IsUserAdmin,)
 
     def get_object(self):
         try:
