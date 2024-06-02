@@ -28,13 +28,6 @@ class ResponseEquipmentSerializer(serializers.ModelSerializer):
         model = Equipment
         fields = '__all__'
 
-    # @extend_schema_field(field=OpenApiTypes.INT)
-    # def get_created_at(self, obj):
-    #     return int(obj.created_at.timestamp())
-    #
-    # @extend_schema_field(field=OpenApiTypes.INT)
-    # def get_expire(self, obj):
-    #     return int(obj.expire.timestamp())
 
 
 class OperatorEmergencySerializer(serializers.ModelSerializer):
@@ -45,9 +38,6 @@ class OperatorEmergencySerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('reason_repairman', 'repair_date', 'repair_code', 'state_code')
 
-    # @extend_schema_field(field=OpenApiTypes.INT)
-    # def get_created_at(self, obj):
-    #     return int(obj.created_at.timestamp())
 
 
 class RepairmanEmergencySerializer(serializers.ModelSerializer):
