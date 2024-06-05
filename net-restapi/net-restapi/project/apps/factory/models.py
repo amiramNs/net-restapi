@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from project.apps.profile.models import User
 
 
 class Equipment(models.Model):
@@ -17,6 +18,7 @@ class Equipment(models.Model):
 
 
 class Emergency(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
     state_code = models.ForeignKey(to=Equipment, to_field='state_code', on_delete=models.CASCADE)
     created_at = models.DateTimeField(null=False)
     reason_operator = models.TextField()
