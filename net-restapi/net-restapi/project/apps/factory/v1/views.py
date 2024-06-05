@@ -22,7 +22,7 @@ from project.permissions import IsUserAdmin, IsUserOperator, IsRepairMan
 class CreateEquipmentView(CreateAPIView):
     serializer_class = serializers.EquipmentSerializer
     response_serializer = serializers.ResponseEquipmentSerializer
-    # permission_classes = (IsUserAdmin,)
+    permission_classes = (IsUserAdmin,)
 
     def create(self, request, *args, **kwargs):
         code_equip = uuid.uuid4()
@@ -128,7 +128,7 @@ class CreateEmergencyView(CreateAPIView):
         repair_code = uuid.uuid4()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        obj = serializer.save(state_code=self.get_object(), repair_code=repair_code)
+        obj = serializer.save(state_code=self.get_object(), repair_code=repair_code, user=request.user)
         return Response(data=self.response_serializer(obj).data, status=status.HTTP_200_OK)
 
     def get_object(self):
@@ -208,15 +208,15 @@ class UpdateEmergencyView(UpdateAPIView):
     response_serializer = serializers.EmergencySerializer
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = self.get_object(request.user)
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
         return Response(data=self.response_serializer(obj).data, status=status.HTTP_200_OK)
 
-    def get_object(self):
+    def get_object(self, user):
         try:
-            return Emergency.objects.get(id=self.kwargs[self.lookup_field])
+            return Emergency.objects.get(id=self.kwargs[self.lookup_field], user=user)
         except Emergency.DoesNotExist:
             raise NotFound('Emergency Notfound!')
 

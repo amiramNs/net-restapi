@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from project.apps.factory.models import Emergency, Equipment
+from project.apps.profile.v1.serializers import ResponseUserSerializer
 
 
 class TimestampField(serializers.Field):
@@ -36,7 +37,7 @@ class OperatorEmergencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Emergency
         fields = '__all__'
-        read_only_fields = ('reason_repairman', 'repair_date', 'repair_code', 'state_code')
+        read_only_fields = ('reason_repairman', 'repair_date', 'repair_code', 'state_code', 'user')
 
 
 
@@ -46,7 +47,7 @@ class RepairmanEmergencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Emergency
         fields = '__all__'
-        read_only_fields = ('state_code', 'created_at', 'reason_operator', 'repair_code')
+        read_only_fields = ('state_code', 'created_at', 'reason_operator', 'repair_code', 'user')
 
     @extend_schema_field(field=OpenApiTypes.INT)
     def get_repair_date(self, obj):
@@ -58,6 +59,7 @@ class EmergencySerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
     repair_date = serializers.SerializerMethodField()
     state_code = ResponseEquipmentSerializer(read_only=True)
+    user = ResponseUserSerializer(read_only=True)
 
     class Meta:
         model = Emergency
