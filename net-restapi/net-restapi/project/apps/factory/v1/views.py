@@ -208,15 +208,15 @@ class UpdateEmergencyView(UpdateAPIView):
     response_serializer = serializers.EmergencySerializer
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object(request.user)
+        instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
         return Response(data=self.response_serializer(obj).data, status=status.HTTP_200_OK)
 
-    def get_object(self, user):
+    def get_object(self):
         try:
-            return Emergency.objects.get(id=self.kwargs[self.lookup_field], user=user)
+            return Emergency.objects.get(id=self.kwargs[self.lookup_field])
         except Emergency.DoesNotExist:
             raise NotFound('Emergency Notfound!')
 
@@ -236,14 +236,14 @@ class UpdateOperatorEmergencyView(UpdateEmergencyView):
     response_serializer = serializers.EmergencySerializer
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = self.get_object(request.user)
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
         return Response(data=self.response_serializer(obj).data, status=status.HTTP_200_OK)
 
-    def get_object(self):
+    def get_object(self, user):
         try:
-            return Emergency.objects.get(id=self.kwargs[self.lookup_field])
+            return Emergency.objects.get(id=self.kwargs[self.lookup_field], user=user)
         except Emergency.DoesNotExist:
             raise NotFound('Emergency Notfound!')
