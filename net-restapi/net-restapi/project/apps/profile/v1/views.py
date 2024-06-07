@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshV
 
 from project.apps.profile.v1.serializers import (UserSerializer, ResponseUserSerializer, LoginSerializer,
                                                  TokenSerializer, LogoutSerializer)
-from project.apps.profile.v1.utils import set_auth_cookie
+from project.apps.profile.v1.utils import set_auth_cookie, clear_auth_cookie
 from project.apps.profile.models import User
 
 
@@ -109,6 +109,7 @@ class GetUserView(APIView):
 class LogoutView(APIView):
     serializer_class = LogoutSerializer
 
+    @clear_auth_cookie
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

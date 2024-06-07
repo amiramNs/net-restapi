@@ -21,3 +21,15 @@ def set_auth_cookie(func):
         return response
 
     return wrapper
+
+
+def clear_auth_cookie(func):
+    def wrapper(*args, **kwargs):
+        response = func(*args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            response.delete_cookie(
+                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            )
+        return response
+
+    return wrapper
